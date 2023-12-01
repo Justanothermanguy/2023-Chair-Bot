@@ -31,6 +31,10 @@ public class Robot extends TimedRobot {
 
   private final XboxController m_driverController = new XboxController(0);
 
+  // Defining drive type
+
+  private boolean m_isArcadeDrive = true;
+
   /**
    * This function runs when the robot is first started up. Insert robot
    * initialization code in
@@ -75,7 +79,20 @@ public class Robot extends TimedRobot {
   // Runs when receiving input from the driver controller
   @Override
   public void teleopPeriodic() {
-    m_robotDrive.arcadeDrive(-m_driverController.getRightY(), m_driverController.getRightX(), true);
+    if (m_isArcadeDrive == true) {
+      m_robotDrive.arcadeDrive(-m_driverController.getRightY(), m_driverController.getRightX(), true);
+    } else if (m_isArcadeDrive == false) {
+      m_robotDrive.tankDrive(-m_driverController.getLeftY(), -m_driverController.getRightY());
+    }
+
+    if (m_driverController.getAButtonPressed()) {
+      if (m_isArcadeDrive == true) {
+        m_isArcadeDrive = false;
+      } else if (m_isArcadeDrive == false) {
+        m_isArcadeDrive = true;
+      }
+    }
+
   }
 
   /*
